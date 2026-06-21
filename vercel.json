@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "outputDirectory": "public",
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.9.0"
+      "runtime": "vercel-php@0.7.1"
     }
   },
   "routes": [
@@ -31,7 +30,11 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "true",
-    "LARAVEL_STORAGE_PATH": "/tmp/storage",
+    "APP_CONFIG_CACHE": "/tmp/config.php",
+    "APP_EVENTS_CACHE": "/tmp/events.php",
+    "APP_PACKAGES_CACHE": "/tmp/packages.php",
+    "APP_ROUTES_CACHE": "/tmp/routes.php",
+    "APP_SERVICES_CACHE": "/tmp/services.php",
     "VIEW_COMPILED_PATH": "/tmp",
     "CACHE_STORE": "array",
     "SESSION_DRIVER": "cookie",
