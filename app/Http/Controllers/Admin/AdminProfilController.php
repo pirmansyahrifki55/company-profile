@@ -9,6 +9,19 @@ use Illuminate\Support\Facades\File;
 
 class AdminProfilController extends Controller
 {
+    private function getImagePath($filename = null)
+    {
+        $base = env('APP_ENV') === 'production' 
+            ? storage_path('app/public/images') 
+            : public_path('images');
+
+        if (!is_dir($base)) {
+            mkdir($base, 0755, true);
+        }
+
+        return $filename ? $base . '/' . $filename : $base;
+    }
+
     public function edit()
     {
         $profile = CompanyProfile::firstOrCreate([
@@ -59,13 +72,14 @@ class AdminProfilController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            if ($profile->logo && File::exists(public_path('images/' . $profile->logo)) && $profile->logo !== 'logo.png') {
-                File::delete(public_path('images/' . $profile->logo));
+            $oldPath = $this->getImagePath($profile->logo);
+            if ($profile->logo && File::exists($oldPath) && $profile->logo !== 'logo.png') {
+                File::delete($oldPath);
             }
 
             $logoFile = $request->file('logo');
             $filename = 'logo_' . time() . '_' . uniqid() . '.' . $logoFile->getClientOriginalExtension();
-            $logoFile->move(public_path('images'), $filename);
+            $logoFile->move($this->getImagePath(), $filename);
             $validated['logo'] = $filename;
         }
 

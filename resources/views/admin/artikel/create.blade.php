@@ -30,7 +30,7 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label manager="status" class="form-label small fw-semibold text-secondary">Status Publikasi</label>
+                <label for="status" class="form-label small fw-semibold text-secondary">Status Publikasi</label>
                 <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                     <option value="" disabled selected>Pilih Status</option>
                     <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft (Simpan Sementara)</option>

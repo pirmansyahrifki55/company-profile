@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\File;
 
 class AdminGaleriController extends Controller
 {
+    private function getImagePath($filename = null)
+    {
+        $base = public_path('images');
+
+        if (!is_dir($base)) {
+            mkdir($base, 0755, true);
+        }
+
+        return $filename ? $base . '/' . $filename : $base;
+    }
+
     public function index()
     {
         $galleries = Gallery::latest()->paginate(10);
@@ -39,13 +50,18 @@ class AdminGaleriController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $filename = 'galeri_' . time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
-            $imageFile->move(public_path('images'), $filename);
+            $imageFile->move($this->getImagePath(), $filename);
             $validated['image'] = $filename;
         }
 
         Gallery::create($validated);
 
         return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil ditambahkan.');
+    }
+
+    public function show($id)
+    {
+        return redirect()->route('admin.galeri.edit', $id);
     }
 
     public function edit($id)
@@ -72,13 +88,14 @@ class AdminGaleriController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($gallery->image && File::exists(public_path('images/' . $gallery->image))) {
-                File::delete(public_path('images/' . $gallery->image));
+            $oldPath = $this->getImagePath($gallery->image);
+            if ($gallery->image && File::exists($oldPath)) {
+                File::delete($oldPath);
             }
 
             $imageFile = $request->file('image');
             $filename = 'galeri_' . time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
-            $imageFile->move(public_path('images'), $filename);
+            $imageFile->move($this->getImagePath(), $filename);
             $validated['image'] = $filename;
         }
 
@@ -91,8 +108,9 @@ class AdminGaleriController extends Controller
     {
         $gallery = Gallery::findOrFail($id);
 
-        if ($gallery->image && File::exists(public_path('images/' . $gallery->image))) {
-            File::delete(public_path('images/' . $gallery->image));
+        $path = $this->getImagePath($gallery->image);
+        if ($gallery->image && File::exists($path)) {
+            File::delete($path);
         }
 
         $gallery->delete();

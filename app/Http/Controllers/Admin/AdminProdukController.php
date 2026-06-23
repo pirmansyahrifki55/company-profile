@@ -10,6 +10,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminProdukController extends Controller
 {
+    private function getImagePath($filename = null)
+    {
+        $base = public_path('images');
+
+        if (!is_dir($base)) {
+            mkdir($base, 0755, true);
+        }
+
+        return $filename ? $base . '/' . $filename : $base;
+    }
+
     public function index()
     {
         $products = Product::latest()->paginate(10);
@@ -45,13 +56,18 @@ class AdminProdukController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $filename = 'produk_' . time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
-            $imageFile->move(public_path('images'), $filename);
+            $imageFile->move($this->getImagePath(), $filename);
             $validated['image'] = $filename;
         }
 
         Product::create($validated);
 
         return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil ditambahkan.');
+    }
+
+    public function show($id)
+    {
+        return redirect()->route('admin.produk.edit', $id);
     }
 
     public function edit($id)
@@ -83,13 +99,14 @@ class AdminProdukController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($product->image && File::exists(public_path('images/' . $product->image))) {
-                File::delete(public_path('images/' . $product->image));
+            $oldPath = $this->getImagePath($product->image);
+            if ($product->image && File::exists($oldPath)) {
+                File::delete($oldPath);
             }
 
             $imageFile = $request->file('image');
             $filename = 'produk_' . time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
-            $imageFile->move(public_path('images'), $filename);
+            $imageFile->move($this->getImagePath(), $filename);
             $validated['image'] = $filename;
         }
 
@@ -102,8 +119,9 @@ class AdminProdukController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        if ($product->image && File::exists(public_path('images/' . $product->image))) {
-            File::delete(public_path('images/' . $product->image));
+        $path = $this->getImagePath($product->image);
+        if ($product->image && File::exists($path)) {
+            File::delete($path);
         }
 
         $product->delete();

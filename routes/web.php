@@ -46,13 +46,3 @@ Route::middleware(['admin.auth'])->prefix('admin')->name('admin.')->group(functi
     Route::get('profil', [AdminProfilController::class, 'edit'])->name('profil.edit');
     Route::put('profil', [AdminProfilController::class, 'update'])->name('profil.update');
 });
-
-// Temporary Route to Run Migration & Seed on Vercel
-Route::get('/run-migration', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
-        return "Migration and seeding completed successfully!<br><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});

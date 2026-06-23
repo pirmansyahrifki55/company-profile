@@ -13,7 +13,7 @@ class ArtikelController extends Controller
     }
      public function show($id)
      {
-         $artikel = Artikel::where('status', 'published')->findOrFail($id);
+         $artikel = Artikel::where('status', 'published')->where('id', $id)->firstOrFail();
         return view('pages.artikel-detail', compact('artikel'));
     }
 }

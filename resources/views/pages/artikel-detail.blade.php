@@ -66,7 +66,7 @@
                     <span class="badge bg-primary badge-modern">
                         {{ $artikel->categori ?? 'Umum' }}
                     </span>
-                    <span class="badge {{ $artikel->status == 'publish' ? 'bg-success' : 'bg-secondary' }} badge-modern">
+                    <span class="badge {{ $artikel->status == 'published' ? 'bg-success' : 'bg-secondary' }} badge-modern">
                         {{ ucfirst($artikel->status) }}
                     </span>
                 </div>

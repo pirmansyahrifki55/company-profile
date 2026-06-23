@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\File;
 
 class AdminArtikelController extends Controller
 {
+    private function getImagePath($filename = null)
+    {
+        $base = public_path('images');
+
+        if (!is_dir($base)) {
+            mkdir($base, 0755, true);
+        }
+
+        return $filename ? $base . '/' . $filename : $base;
+    }
+
     public function index()
     {
         $artikels = Artikel::latest()->paginate(10);
@@ -43,7 +54,7 @@ class AdminArtikelController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $filename = 'artikel_' . time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
-            $imageFile->move(public_path('images'), $filename);
+            $imageFile->move($this->getImagePath(), $filename);
             $validated['image'] = $filename;
         }
 
@@ -87,13 +98,14 @@ class AdminArtikelController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($artikel->image && File::exists(public_path('images/' . $artikel->image))) {
-                File::delete(public_path('images/' . $artikel->image));
+            $oldPath = $this->getImagePath($artikel->image);
+            if ($artikel->image && File::exists($oldPath)) {
+                File::delete($oldPath);
             }
 
             $imageFile = $request->file('image');
             $filename = 'artikel_' . time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
-            $imageFile->move(public_path('images'), $filename);
+            $imageFile->move($this->getImagePath(), $filename);
             $validated['image'] = $filename;
         }
 
@@ -106,8 +118,9 @@ class AdminArtikelController extends Controller
     {
         $artikel = Artikel::findOrFail($id);
 
-        if ($artikel->image && File::exists(public_path('images/' . $artikel->image))) {
-            File::delete(public_path('images/' . $artikel->image));
+        $path = $this->getImagePath($artikel->image);
+        if ($artikel->image && File::exists($path)) {
+            File::delete($path);
         }
 
         $artikel->delete();

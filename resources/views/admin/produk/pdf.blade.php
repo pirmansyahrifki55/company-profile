@@ -7,25 +7,25 @@
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             font-size: 12px;
-            color: #333333;
+            color: #000000;
             margin: 0;
             padding: 10px;
         }
         .header {
             text-align: center;
-            border-bottom: 2px solid #0b2f6b;
+            border-bottom: 2px solid #000000;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
         .header h2 {
             margin: 0;
-            color: #0b2f6b;
+            color: #000000;
             font-size: 20px;
             font-weight: bold;
         }
         .header p {
             margin: 5px 0 0;
-            color: #666666;
+            color: #000000;
             font-size: 11px;
         }
         .meta-info {
@@ -45,20 +45,17 @@
             margin-bottom: 30px;
         }
         .table-data th {
-            background-color: #0b2f6b;
-            color: #ffffff;
+            background-color: transparent;
+            color: #000000;
             font-weight: bold;
             padding: 10px 8px;
             text-align: left;
-            border: 1px solid #0b2f6b;
+            border: 1px solid #000000;
         }
         .table-data td {
             padding: 10px 8px;
-            border: 1px solid #dddddd;
+            border: 1px solid #000000;
             vertical-align: top;
-        }
-        .table-data tr:nth-child(even) td {
-            background-color: #f9fafb;
         }
         .text-right {
             text-align: right;
@@ -69,26 +66,21 @@
             font-size: 10px;
             font-weight: bold;
             border-radius: 4px;
-            color: #ffffff;
-        }
-        .badge-success {
-            background-color: #10b981;
-        }
-        .badge-secondary {
-            background-color: #6b7280;
+            color: #000000;
+            border: 1px solid #000000;
         }
         .summary-box {
-            background-color: #f3f4f6;
+            background-color: transparent;
             border-radius: 8px;
             padding: 15px;
             width: 300px;
             float: right;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #000000;
         }
         .summary-box h4 {
             margin: 0 0 10px;
-            color: #0b2f6b;
-            border-bottom: 1px solid #dddddd;
+            color: #000000;
+            border-bottom: 1px solid #000000;
             padding-bottom: 5px;
         }
         .summary-row {
